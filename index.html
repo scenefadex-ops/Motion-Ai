@@ -1,0 +1,144 @@
+<!DOCTYPE html><html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Motion AI</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
+      color: #f5f5ff;
+      background: #090b14;
+      padding: 24px 16px;
+    }
+    .container {
+      max-width: 480px;
+      margin: 0 auto;
+    }
+    header { text-align: center; padding: 24px 0; }
+    .logo { font-size: 34px; font-weight: bold; }
+    .logo span { color: #9b7bff; }
+    .subtitle { color: #a9abc2; line-height: 1.5; }
+    .card {
+      background: #141725;
+      border: 1px solid #292d43;
+      border-radius: 18px;
+      padding: 20px;
+      margin: 18px 0;
+    }
+    label {
+      display: block;
+      margin: 16px 0 9px;
+      font-weight: bold;
+    }
+    input, textarea {
+      width: 100%;
+      padding: 14px;
+      border-radius: 10px;
+      border: 1px solid #393e58;
+      background: #0c0f1c;
+      color: white;
+      font-size: 16px;
+    }
+    textarea { min-height: 105px; resize: vertical; }
+    .preview {
+      display: none;
+      width: 100%;
+      max-height: 320px;
+      object-fit: contain;
+      margin-top: 14px;
+      border-radius: 12px;
+    }
+    button {
+      width: 100%;
+      border: 0;
+      border-radius: 12px;
+      padding: 16px;
+      margin-top: 18px;
+      background: #8b6cff;
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
+    }
+    button:disabled { opacity: 0.5; }
+    .notice {
+      color: #b8bad0;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+    #status { margin-top: 16px; line-height: 1.5; }
+    footer { text-align: center; color: #888ba5; font-size: 12px; }
+  </style>
+</head>
+<body>
+  <main class="container">
+    <header>
+      <div class="logo">MOTION <span>AI</span></div>
+      <h1>Оживи свою фотографию</h1>
+      <p class="subtitle">Загрузи изображение и опиши движение, которое хочешь увидеть.</p>
+    </header><section class="card">
+  <label for="photo">1. Выбери фотографию</label>
+  <input id="photo" type="file" accept="image/*">
+  <img id="preview" class="preview" alt="Предпросмотр фотографии">
+
+  <label for="prompt">2. Опиши движение</label>
+  <textarea id="prompt" maxlength="1000"
+    placeholder="Например: человек улыбается, ветер развевает волосы, камера медленно приближается..."></textarea>
+
+  <label for="duration">3. Длительность видео</label>
+  <select id="duration" style="width:100%;padding:14px;border-radius:10px;background:#0c0f1c;color:white;font-size:16px">
+    <option value="1">1 секунда</option>
+    <option value="2" selected>2 секунды</option>
+  </select>
+
+  <button id="generate">Создать видео</button>
+  <div id="status" role="status"></div>
+</section>
+
+<section class="card">
+  <h3>Как это работает?</h3>
+  <p class="notice">Motion AI будет отправлять фотографию и описание в настоящую нейросеть для генерации видео. Для этого потребуется подключить сервер и API видеогенератора.</p>
+  <p class="notice">Пока подключение не настроено, генерация видео недоступна. Мы подключим её следующим этапом.</p>
+</section>
+
+<footer>Motion AI · Image to Video</footer>
+
+  </main>  <script>
+    const photo = document.getElementById('photo');
+    const preview = document.getElementById('preview');
+    const prompt = document.getElementById('prompt');
+    const generate = document.getElementById('generate');
+    const status = document.getElementById('status');
+
+    photo.addEventListener('change', () => {
+      const file = photo.files[0];
+      if (!file) return;
+
+      if (!file.type.startsWith('image/')) {
+        status.textContent = 'Пожалуйста, выбери файл изображения.';
+        return;
+      }
+
+      preview.src = URL.createObjectURL(file);
+      preview.style.display = 'block';
+      status.textContent = 'Фотография загружена. Теперь опиши движение.';
+    });
+
+    generate.addEventListener('click', () => {
+      if (!photo.files.length) {
+        status.textContent = 'Сначала выбери фотографию.';
+        return;
+      }
+
+      if (!prompt.value.trim()) {
+        status.textContent = 'Сначала опиши желаемое движение.';
+        return;
+      }
+
+      status.textContent =
+        'Интерфейс работает, но нейросеть ещё не подключена. Следующим шагом настроим настоящий API видеогенерации.';
+    });
+  </script></body>
+</html>
